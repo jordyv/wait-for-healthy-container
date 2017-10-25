@@ -23,11 +23,11 @@ function usage() {
 
 function get_health_state {
     state=$(docker inspect -f '{{ .State.Health.Status }}' ${container_name})
-    if [ ${state} == "healthy" ]; then
+    if [ "${state}" -eq "healthy" ]; then
         return ${RETURN_HEALTHY}
-    elif [ ${state} == "unhealthy" ]; then
+    elif [ "${state}" -eq "unhealthy" ]; then
         return ${RETURN_UNHEALTHY}
-    elif [ ${state} == "starting" ]; then
+    elif [ "${state}" -eq "starting" ]; then
         return ${RETURN_STARTING}
     else
         return ${RETURN_UNKNOWN}
