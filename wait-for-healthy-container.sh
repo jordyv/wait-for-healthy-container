@@ -28,11 +28,11 @@ function get_health_state {
     if [ ! ${return_code} -eq 0 ]; then
         exit ${RETURN_ERROR}
     fi
-    if [[ "${state}" -eq "healthy" ]]; then
+    if [[ "${state}" == "healthy" ]]; then
         return ${RETURN_HEALTHY}
-    elif [[ "${state}" -eq "unhealthy" ]]; then
+    elif [[ "${state}" == "unhealthy" ]]; then
         return ${RETURN_UNHEALTHY}
-    elif [[ "${state}" -eq "starting" ]]; then
+    elif [[ "${state}" == "starting" ]]; then
         return ${RETURN_STARTING}
     else
         return ${RETURN_UNKNOWN}
