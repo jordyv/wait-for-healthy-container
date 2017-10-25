@@ -12,7 +12,8 @@ fi
 RETURN_HEALTHY=0
 RETURN_STARTING=1
 RETURN_UNHEALTHY=2
-RETURN_UNKNOWN=99
+RETURN_UNKNOWN=3
+RETURN_ERROR=99
 
 function usage() {
     echo "
@@ -23,11 +24,15 @@ function usage() {
 
 function get_health_state {
     state=$(docker inspect -f '{{ .State.Health.Status }}' ${container_name})
-    if [ "${state}" -eq "healthy" ]; then
+    return_code=$?
+    if [ ! ${return_code} -eq 0 ]; then
+        exit ${RETURN_ERROR}
+    fi
+    if [[ "${state}" -eq "healthy" ]]; then
         return ${RETURN_HEALTHY}
-    elif [ "${state}" -eq "unhealthy" ]; then
+    elif [[ "${state}" -eq "unhealthy" ]]; then
         return ${RETURN_UNHEALTHY}
-    elif [ "${state}" -eq "starting" ]; then
+    elif [[ "${state}" -eq "starting" ]]; then
         return ${RETURN_STARTING}
     else
         return ${RETURN_UNKNOWN}
