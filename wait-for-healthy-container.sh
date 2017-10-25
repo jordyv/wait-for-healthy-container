@@ -45,7 +45,7 @@ function wait_for() {
         get_health_state
         state=$?
         if [ ${state} -eq 0 ]; then
-            echo "Container is healthy."
+            echo "Container is healthy after ${i} seconds."
             exit 0
         fi
         sleep 1
