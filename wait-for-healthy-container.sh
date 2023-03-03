@@ -23,14 +23,14 @@ function usage() {
 }
 
 function get_health_state {
-    state=$(docker inspect -f '{{ .State.Health.Status }}' ${container_name})
+    state=$(docker inspect -f '{{ .State.Status }}' ${container_name})
     return_code=$?
     if [ ! ${return_code} -eq 0 ]; then
         exit ${RETURN_ERROR}
     fi
-    if [[ "${state}" == "healthy" ]]; then
+    if [[ "${state}" == "running" ]]; then
         return ${RETURN_HEALTHY}
-    elif [[ "${state}" == "unhealthy" ]]; then
+    elif [[ "${state}" == "dead" ]]; then
         return ${RETURN_UNHEALTHY}
     elif [[ "${state}" == "starting" ]]; then
         return ${RETURN_STARTING}
@@ -51,7 +51,7 @@ function wait_for() {
         sleep 1
     done
 
-    echo "Timeout exceeded. Health status returned: $(docker inspect -f '{{ .State.Health.Status }}' ${container_name})"
+    echo "Timeout exceeded. Health status returned: $(docker inspect -f '{{ .State.Status }}' ${container_name})"
     exit 1
 }
 
